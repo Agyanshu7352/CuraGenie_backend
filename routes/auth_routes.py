@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from utils.database import mongo  # Add this import at the top
 import jwt
 from datetime import datetime, timedelta
 import logging
@@ -51,7 +52,6 @@ def verify_token_and_get_user():
 
     try:
         data = jwt.decode(token, current_app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
-        mongo = current_app.mongo
         current_user = mongo.db.users.find_one({'_id': ObjectId(data['sub'])})
         
         if not current_user:
@@ -97,7 +97,6 @@ def register():
         if not is_valid:
             return jsonify({'success': False, 'error': message}), 400
             
-        mongo = current_app.mongo
         if mongo.db.users.find_one({'email': email}):
             return jsonify({'success': False, 'error': 'User with this email already exists'}), 409
             
@@ -133,7 +132,6 @@ def login():
         if not email or not password:
             return jsonify({'success': False, 'message': 'Email and password are required.'}), 400
 
-        mongo = current_app.mongo
         user = mongo.db.users.find_one({'email': email.strip().lower()})
 
         if not user or 'password' not in user or not check_password_hash(user['password'], password):
