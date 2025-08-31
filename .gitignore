@@ -1,29 +1,44 @@
+# -------------------------------
 # Python
+# -------------------------------
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
+
+# Virtual Environments
 env/
-env.example/
 venv/
-.venv/
 ENV/
+.venv/
 env.bak/
 venv.bak/
 
-# Environment
+# -------------------------------
+# Environment files
+# -------------------------------
 .env
 .env.example
 
-# Uploads
+# -------------------------------
+# Uploads (user-generated content)
+# -------------------------------
 uploads/
 
-
+# -------------------------------
 # Logs
+# -------------------------------
 *.log
+mediguide.log
 
-# IDE
+# -------------------------------
+# IDE & Editors
+# -------------------------------
 .vscode/
 .idea/
-mediguide.log
+
+# -------------------------------
+# Others
+# -------------------------------
+.DS_Store
