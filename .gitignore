@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+env.example/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment
+.env
+.env.example
+
+# Uploads
+uploads/
+
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+mediguide.log
