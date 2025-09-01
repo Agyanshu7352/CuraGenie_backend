@@ -13,7 +13,7 @@ bcrypt==4.1.2
 pytesseract==0.3.10
 opencv-python==4.8.1.78
 Pillow>=10.4.0
-PyMuPDF==1.23.8
+PyMuPDF==1.23.26
 numpy==1.25.2
 
 # File Handling and Validation
