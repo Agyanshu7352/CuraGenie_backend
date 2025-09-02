@@ -47,7 +47,7 @@ def create_app(config_name=None):
     
     # --- 2. Configure CORS for Cross-Origin Requests ---
     # Allow requests from frontend (React/Vue/etc.) running on different port/domain
-    cors_origins = app.config.get('CORS_ORIGINS', ['http://localhost:5173'])
+    cors_origins = app.config.get('CORS_ORIGINS', ['https://cura-genie-zeta.vercel.app/'])
     if isinstance(cors_origins, str):
         cors_origins = cors_origins.split(',')
     
