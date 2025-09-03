@@ -50,11 +50,9 @@ def create_app(config_name=None):
     cors_origins = app.config.get('CORS_ORIGINS', [
         'https://cura-genie-zeta.vercel.app',
         'http://localhost:5173',  # Vite default port
-        'http://localhost:3000'   # Alternative port
     ])
     if isinstance(cors_origins, str):
         cors_origins = cors_origins.split(',')
-
     CORS(
         app,
         resources={r"/api/*": {"origins": cors_origins}},
