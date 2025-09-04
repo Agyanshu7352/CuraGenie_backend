@@ -65,6 +65,8 @@ def upload_report(current_user):
             # STEP 1: Run OCR
             from services.ocr_model import extract_text_from_file
             extracted_text = extract_text_from_file(file_path)
+            print('====================EXTRACTED TEXT============') 
+            print(extracted_text)
 
             if not extracted_text:
                 mongo.db.reports.update_one({'_id': report_id}, {'$set': {'status': 'ocr_failed'}})
