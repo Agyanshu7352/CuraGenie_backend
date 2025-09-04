@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 import logging
 from bson import ObjectId
+from bson import json_util
+import json
 from routes.auth_routes import token_required   
 
 
@@ -120,14 +122,12 @@ def list_reports(current_user):
             {"user_id": current_user["_id"]}
         ).sort('upload_date', -1)
 
-        reports_list = []
-        for report in reports_cursor:
-            report['_id'] = str(report['_id'])
-            reports_list.append(report)
+        reports_list = list(reports_cursor)
+        reports_json = json.loads(json_util.dumps(reports_list))
 
-        return jsonify({'success': True, 'reports': reports_list}), 200
+        return jsonify({'success': True, 'reports': reports_json}), 200
     except Exception as e:
-        logger.error(f"Failed to fetch report list: {e}")
+        logger.error(f"Failed to fetch report list: {e}", exc_info=True)
         return jsonify({'success': False, 'error': 'Failed to retrieve reports.'}), 500
 
 
