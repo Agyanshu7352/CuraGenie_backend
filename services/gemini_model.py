@@ -127,18 +127,36 @@ def get_master_analysis(report_text: str) -> dict:
         logger.info("Sending request to Gemini API for MASTER analysis...")
         response = model.generate_content(
             prompt,
-            generation_config={"response_mime_type": "application/json"}  # ✅ force JSON
+            generation_config=genai.GenerationConfig(
+                response_mime_type="application/json"
+            )
         )
 
-        raw_text = response.text.strip()
-        logger.debug(f"Raw Gemini response: {raw_text[:200]}...")  # only log first 200 chars
+        # Safely extract response text
+        raw_text = getattr(response, "text", None)
+        if not raw_text:
+            # fallback if .text missing
+            try:
+                raw_text = response.candidates[0].content.parts[0].text
+            except Exception:
+                logger.error("Gemini API returned no usable text response.")
+                return {"error": "Gemini API returned empty response."}
+
+        raw_text = raw_text.strip()
+        logger.debug(f"Raw Gemini response: {raw_text[:200]}...")
+
+        # Ensure clean JSON (remove markdown fences if any)
+        if raw_text.startswith("```"):
+            raw_text = raw_text.strip("`")
+            if raw_text.lower().startswith("json"):
+                raw_text = raw_text[4:].strip()
 
         analysis_data = json.loads(raw_text)
         logger.info("Successfully received and parsed MASTER analysis from Gemini API.")
         return analysis_data
 
     except json.JSONDecodeError:
-        logger.error(f"Failed to decode JSON from Gemini response. Raw text: {response.text}")
+        logger.error(f"Failed to decode JSON from Gemini response. Raw text: {raw_text}")
         return {"error": "Failed to parse AI analysis. The response was not valid JSON."}
     except Exception as e:
         logger.error(f"An error occurred while communicating with the Gemini API: {e}")
