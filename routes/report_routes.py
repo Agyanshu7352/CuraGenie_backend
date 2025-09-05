@@ -122,7 +122,7 @@ def list_reports(current_user):
         mongo = current_app.mongo
         reports_cursor = mongo.db.reports.find(
             {"user_id": current_user["_id"]}
-        ).sort('upload_date', -1)
+        ).sort('upload_date', -1).limit(5)
 
         reports_list = list(reports_cursor)
         reports_json = json.loads(json_util.dumps(reports_list))
