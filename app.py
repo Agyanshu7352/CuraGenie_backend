@@ -2,9 +2,11 @@
 
 import os
 import logging
+import json
 from datetime import datetime
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
+from bson import ObjectId
 
 # Import configurations and initializers
 from utils.config import Config, config
@@ -44,6 +46,15 @@ def create_app(config_name=None):
     
     # Initialize configuration-specific settings
     config[config_name].init_app(app)
+    
+    # --- MongoDB JSON Encoder ---
+    class MongoJSONEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, ObjectId):
+                return str(obj)
+            return super().default(obj)
+    
+    app.json_encoder = MongoJSONEncoder
     
     # --- 2. Configure CORS for Cross-Origin Requests ---
     # Allow requests from frontend (React/Vue/etc.) running on different port/domain
