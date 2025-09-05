@@ -240,20 +240,35 @@ def get_last_report(current_user):
     try:
         mongo = current_app.mongo
 
-        # get last report for this user, sorted by upload_date
+        # Convert current_user _id to ObjectId if it's a string, or keep as ObjectId
+        user_id = current_user["_id"]
+        if isinstance(user_id, str):
+            from bson import ObjectId
+            user_id = ObjectId(user_id)
+
+        # Get last report for this user, sorted by upload_date
         last_report = mongo.db.reports.find_one(
-            {"user_id": current_user["_id"]},
+            {"user_id": user_id},
             sort=[("upload_date", -1)]
         )
 
         if not last_report:
             return jsonify({"success": False, "error": "No reports found"}), 404
 
-        # convert ObjectId to string for JSON
+        # Convert all ObjectId fields to strings for JSON serialization
         last_report["_id"] = str(last_report["_id"])
+        if "user_id" in last_report:
+            last_report["user_id"] = str(last_report["user_id"])
+        
+        # Convert any other ObjectId fields that might exist
+        for key, value in last_report.items():
+            if hasattr(value, 'ObjectId') or str(type(value)).find('ObjectId') != -1:
+                last_report[key] = str(value)
 
         return jsonify({"success": True, "report": last_report}), 200
 
     except Exception as e:
-        logger.error(f"Failed to fetch last report for user {current_user['_id']}: {e}")
+        # Convert user_id to string for logging to avoid the serialization error
+        user_id_str = str(current_user["_id"]) if current_user and "_id" in current_user else "unknown"
+        logger.error(f"Failed to fetch last report for user {user_id_str}: {e}")
         return jsonify({"success": False, "error": "Internal server error"}), 500
