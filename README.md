@@ -6,27 +6,17 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active%20Development-orange.svg)]()
 
-## 📋 Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [Future Enhancements](#future-enhancements)
-- [License](#license)
 
 ## 🔍 Overview
+
+![alt text](image.png)
 
 MediGuide AI is a revolutionary web-based intelligent healthcare assistant that empowers patients to understand and manage their health reports more effectively. By leveraging cutting-edge AI technologies, the platform bridges the gap between complex medical data and patient understanding, promoting proactive wellness management.
 
 The system automatically analyzes uploaded medical reports using OCR and NLP techniques, providing personalized insights including dietary suggestions, health concerns identification, and comprehensive medication explanations.
 
 ## ✨ Features
-
+![alt text](image-1.png)
 ### 🔧 Core Features
 - **📄 Multi-format Report Upload**: Support for PDF, images, and various document formats
 - **🤖 AI-Powered Analysis**: Intelligent extraction and interpretation of medical terms
